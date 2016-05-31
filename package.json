@@ -1,0 +1,15 @@
+{
+  "name": "linkedlist-exmple",
+  "version": "1.0.0",
+  "main": "LinkedList.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Powell, Anthony",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "devDependencies": {},
+  "description": ""
+}
