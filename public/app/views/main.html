@@ -1,0 +1,31 @@
+<div class="container">
+    <h1 class="lead" id='title'>Linked List Example <small>a visual example of LinkedList.</small></h1>
+</div>
+<div class='container'>
+    <!--            <div class='col-xs-12'>-->
+    <div class="row col-xs-12 form-group">
+        <label for="list-display">LinkedList</label>
+        <h3 type="text" id="list-display">{{link.show}}</h3>
+        <small class="text-muted">Checkout your list.</small>
+        <br>
+        
+        <h3 type="text" id="list-size">List Size: {{link.size}}</h3>
+    </div>
+    <div class="row">
+        <div class='col-xs-3 col-xs-offset-5'>
+            <div class="input-group">
+                <span class='input-group-addon'>Node value to add:</span>
+                <input type="text" id='node-input' class='form-control' ng-model='link.val'>
+                <div class='input-group-btn'>
+                    <button class='btn btn-default dropdown-toggle' data-toggle='dropdown' ng-click="">Add</button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="dropdown-item" ng-click="link.append(val)">To End</a></li>
+                        <li><a href="#" class="dropdown-item" ng-click="link.prepend(val)">To Start</a></li>
+                        <li><a href="#" class="dropdown-item" ng-click="link.remove(val)">Remove</a></li>
+                        <li><a href="#" class="dropdown-item"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

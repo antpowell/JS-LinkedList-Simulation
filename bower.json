@@ -1,0 +1,19 @@
+{
+  "name": "linkedlist-exmple",
+  "description": "",
+  "main": "LinkedList.js",
+  "authors": [
+    "Powell",
+    "Anthony"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/antpowell/JS-LinkedList-Simulation",
+  "dependencies": {
+    "angular": "^1.5.6",
+    "bootstrap": "^3.3.6",
+    "angular-route": "^1.5.6"
+  },
+  "install": {
+    "path": "public/libs"
+  }
+}

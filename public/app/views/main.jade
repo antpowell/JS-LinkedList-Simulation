@@ -1,0 +1,28 @@
+.container
+      h1#title.lead
+        | Linked List Example 
+        small a visual example of LinkedList.
+    .container
+      // <div class='col-xs-12'>
+      .row.col-xs-12.form-group
+        label(for='list-display') You'r List
+        input#list-display.form-control(type='text')
+        small.text-muted Checkout your list.
+        br
+        label(for='list-size') List Size
+        input#list-size.form-control(type='text')
+      .row
+        .col-xs-3.col-xs-offset-5
+          .input-group
+            span.input-group-addon Node value to add:
+            // <label for="node-input">Node Value to Add: </label>
+            input#node-input.form-control(type='text')
+            span.input-group-btn
+              button.btn.btn-default Add
+      // </div>
+      //
+        <br>
+        <div class="row">
+        <button class='btn btn-default'>Behind The Scenes</button>
+        </div>
+        <div class="row" id="code-section"></div>
