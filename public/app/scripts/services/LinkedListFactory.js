@@ -73,17 +73,21 @@ angular.module('app')
             }
 
             console.log("Searching List.");
+//            if(this.head.data === val){
+//                console.log("Node Found! ")
+//                this.head = this.head.next;
+//            }
             while (current.data !== val) {
                 pre = current;
                 current = current.next;
             }
             if (current.data == val) {
                 console.log("Node found.");
-                if (pre !== undefined) {
-                    pre.next = current.next;
+                if (this.head.data === val) {
+                    this.head = this.head.next;
                     console.log("Node removed.");
                 }else{
-                    current = current.next;
+                    pre.next = current.next;
                 }
 
             }
