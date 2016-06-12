@@ -21,6 +21,9 @@ angular.module('app')
                 link.size = LinkedListFactory.size();
                 link.show = LinkedListFactory.display();
             }
+        link.reverse = function(){
+            link.reverse = LinkedListFactory.reverse();
+        }
             //        link.size = function(){
             //            return LinkedListFactory.size();
             //        }

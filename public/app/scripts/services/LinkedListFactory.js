@@ -73,10 +73,10 @@ angular.module('app')
             }
 
             console.log("Searching List.");
-//            if(this.head.data === val){
-//                console.log("Node Found! ")
-//                this.head = this.head.next;
-//            }
+            //            if(this.head.data === val){
+            //                console.log("Node Found! ")
+            //                this.head = this.head.next;
+            //            }
             while (current.data !== val) {
                 pre = current;
                 current = current.next;
@@ -86,7 +86,7 @@ angular.module('app')
                 if (this.head.data === val) {
                     this.head = this.head.next;
                     console.log("Node removed.");
-                }else{
+                } else {
                     pre.next = current.next;
                 }
 
@@ -96,7 +96,17 @@ angular.module('app')
 
         //==================Reverse list
         LinkedList.prototype.reverse = function () {
+            var i = 0;
+            var holder = new Array();
+            current = this.head;
+            while (current !== null) {
 
+                holder.push(current.data);
+
+                i++;
+                current = current.next;
+            }
+            return console.log(holder);
 
         };
         LinkedList.prototype.contains = function (val) {
@@ -144,6 +154,9 @@ angular.module('app')
         }
         factory.remove = function (val) {
             list.remove(val);
+        }
+        factory.reverse = function () {
+            list.reverse();
         }
 
         return factory;
