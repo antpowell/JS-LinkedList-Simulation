@@ -120,7 +120,7 @@ angular.module('app')
             }
             console.log("Node does not exist.");
             return false;
-        }
+        };
 
         LinkedList.prototype.display = function () {
             var print = "[";
@@ -135,29 +135,32 @@ angular.module('app')
                 } else if (current === null) {
                     print += ']->null';
                 }
+
+            }
+            if(this.size() === 0 ){
+                print = "";
             }
             return print;
         };
         var list = new LinkedList();
         factory.size = function () {
             return list.size();
-        }
+        };
         factory.display = function () {
             return list.display();
-        }
-
+        };
         factory.append = function (val) {
             list.append(val);
-        }
+        };
         factory.prepend = function (val) {
             list.prepend(val);
-        }
+        };
         factory.remove = function (val) {
             list.remove(val);
-        }
+        };
         factory.reverse = function () {
             list.reverse();
-        }
+        };
 
         return factory;
     });

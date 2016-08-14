@@ -10,20 +10,20 @@ angular.module('app')
             LinkedListFactory.append(link.val);
             link.size = LinkedListFactory.size();
             link.show = LinkedListFactory.display();
-        }
+        };
         link.prepend = function () {
             link.size = LinkedListFactory.prepend(link.val);
             link.size = LinkedListFactory.size();
             link.show = LinkedListFactory.display();
-        }
+        };
         link.remove = function () {
                 link.size = LinkedListFactory.remove(link.val);
                 link.size = LinkedListFactory.size();
                 link.show = LinkedListFactory.display();
-            }
+            };
         link.reverse = function(){
             link.reverse = LinkedListFactory.reverse();
-        }
+        };
             //        link.size = function(){
             //            return LinkedListFactory.size();
             //        }
