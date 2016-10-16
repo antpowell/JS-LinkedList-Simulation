@@ -1,0 +1,13 @@
+.full-center{
+    height: 100%;
+    top:33%;
+    position: absolute;
+    margin: auto;
+
+}
+#title{
+    font-size: 2.5em !important;
+}
+#instructions{
+    text-align: start;
+}

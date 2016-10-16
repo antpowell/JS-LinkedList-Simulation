@@ -47,6 +47,15 @@ angular.module('app')
 
         };
 
+        LinkedList.prototype.insert = function(index, val){
+
+            //check if list is empty
+            //check if list is length required
+            //find index
+            //add value at index
+
+        };
+
         //==================Count the number of nodes in the list
         LinkedList.prototype.size = function () {
             var count = 0;
@@ -135,6 +144,7 @@ angular.module('app')
                 } else if (current === null) {
                     print += ']->null';
                 }
+
 
             }
             if(this.size() === 0 ){
