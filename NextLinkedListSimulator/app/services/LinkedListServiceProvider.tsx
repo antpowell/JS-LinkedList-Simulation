@@ -1,5 +1,6 @@
 'use client';
-import { Dispatch, SetStateAction, useState, createContext, useContext, ReactNode, useMemo } from 'react';
+
+import { Dispatch, ReactNode, createContext, useContext, useReducer } from 'react';
 
 export type LinkNode<T> = {
   data: T;
@@ -11,35 +12,153 @@ export type LinkedList = {
 };
 
 export interface iLinkedListServiceProvider {
-  list: LinkedList;
-  setList: Dispatch<SetStateAction<LinkedList>>;
-  prepend: <T>(data: T) => void;
-  append: <T>(data: T) => void;
-  size: () => number;
-  remove: <T>(data: T) => void;
-  reverse: () => void;
-  show: () => Array<unknown>;
-  hasValue: <T>(data: T) => boolean;
-  isEmpty: () => boolean;
-  getList: () => LinkedList;
+  linkedList: LinkedList;
+  linkedListDispatcher: Dispatch<LinkedListActions>;
+  getSize: (list: LinkedList) => number;
+  show: (list: LinkedList) => Array<unknown>;
+  hasValue: <T>(list: LinkedList, data: T) => boolean;
+  isEmpty: (list: LinkedList) => boolean;
 }
 
+export type LinkedListActionTypes = 'prepend' | 'append' | 'remove' | 'reverse';
+
+export interface LinkedListActions {
+  type: LinkedListActionTypes;
+  data: unknown;
+}
+
+const linkedListReducer = (state: LinkedList, action: LinkedListActions) => {
+  const { type, data } = action;
+  const newListState = { ...state };
+  switch (type) {
+    case 'append': {
+      if (newListState.head === null) {
+        newListState.head = { data, next: null };
+        return { ...newListState };
+      } else {
+        let current = newListState.head;
+        // Traverse to the end of the list
+        while (current.next !== null) {
+          current = current.next;
+        }
+
+        // Add new node to the end of the list
+        console.log(`adding ${data} to the end of the list`);
+        current.next = { data, next: null };
+
+        return { ...state, ...newListState };
+      }
+    }
+    case 'prepend': {
+      if (!data) {
+        console.log('error, no data to prepend');
+        return { ...newListState };
+      }
+      if (newListState.head === null) {
+        newListState.head = { data, next: null };
+        return { ...newListState };
+      } else {
+        const newNode: LinkNode<typeof data> = { data, next: newListState.head };
+        // add new node to the beginning of the list
+        console.log(`adding ${data} to the beginning of the list`);
+
+        newListState.head = newNode;
+        return { ...newListState };
+      }
+    }
+    case 'remove': {
+      if (!data) {
+        console.log('error, no data to remove');
+        return { ...newListState };
+      }
+      if (newListState.head === null) {
+        // List is empty, nothing to remove
+        return { ...newListState };
+      } else {
+        let current: LinkNode<unknown> = newListState.head;
+        let previous: LinkNode<unknown> = newListState.head;
+
+        if (current.data === data) {
+          // Remove first node
+          console.log(`removing ${data} from the beginning of the list`);
+          newListState.head = current.next;
+        } else {
+          while (current.next !== null) {
+            previous = current;
+            current = current.next;
+            if (current.data === data) {
+              // Remove current node
+              console.log(`removing ${data} from the list`);
+              previous.next = current.next;
+              current.next = null;
+            }
+          }
+        }
+        return { ...newListState };
+      }
+    }
+    case 'reverse':
+    default:
+      return state;
+  }
+};
+
+const hasValue = <T,>(list: LinkedList, data: T) => {
+  let current = list.head;
+
+  // Traverse the list
+  log('checking for data: ', data);
+  while (current !== null) {
+    if (current.data === data) {
+      // Data found
+      return true;
+    }
+    current = current.next;
+  }
+
+  // Data not found
+  return false;
+};
+
+const getSize = (list: LinkedList) => {
+  let count = 0;
+  let current = list.head;
+  while (current !== null) {
+    count++;
+    current = current.next;
+  }
+  return count;
+};
+
+const show = (list: LinkedList): Array<unknown> => {
+  const localList = [];
+  let current = list.head;
+
+  // Traverse the list
+  while (current !== null) {
+    console.log(current.data);
+    localList.push(current.data);
+    current = current.next;
+  }
+  return localList;
+};
+
+const isEmpty = (list: LinkedList) => {
+  return list.head === null;
+};
+
 const LinkedListServiceContext = createContext<iLinkedListServiceProvider>({
-  list: { head: null },
-  setList: (): LinkedList => ({ head: null }),
-  prepend: <T,>(data: T) => {},
-  append: <T,>(data: T) => {},
-  size: () => 0,
-  remove: <T,>(data: T) => {},
-  reverse: () => {},
-  show: () => [],
-  hasValue: <T,>(data: T) => false,
-  isEmpty: () => true,
-  getList: () => ({ head: null })
+  linkedList: { head: null },
+  linkedListDispatcher: () => {},
+  getSize: getSize,
+  show: show,
+  hasValue: hasValue,
+  isEmpty: isEmpty
 });
 
 export const LinkedListServiceProvider = ({ children }: { children: ReactNode }) => {
-  const [list, setList] = useState<LinkedList>({ head: null });
+  const [linkedListState, linkedListDispatcher] = useReducer(linkedListReducer, { head: null });
+  // const [list, setList] = useState<LinkedList>({ head: null });
 
   // let list: LinkedList;
 
@@ -57,34 +176,30 @@ export const LinkedListServiceProvider = ({ children }: { children: ReactNode })
   };
 
   // Add node to the end of the list
-  const append = useMemo(
-    () =>
-      <T,>(data: T) => {
-        const newNode: LinkNode<T> = { data, next: null };
+  const append = <T,>(data: T) => {
+    const newNode: LinkNode<T> = { data, next: null };
 
-        setList((prevList: LinkedList) => {
-          if (prevList.head === null) {
-            // List is empty, adding first node
-            console.log(`adding ${data} first node to the list`);
-            prevList.head = newNode;
-            return prevList;
-          } else {
-            let current = prevList.head;
-            // Traverse to the end of the list
-            while (current.next !== null) {
-              current = current.next;
-            }
+    setList((prevList: LinkedList) => {
+      if (prevList.head === null) {
+        // List is empty, adding first node
+        console.log(`adding ${data} first node to the list`);
+        prevList.head = newNode;
+        return prevList;
+      } else {
+        let current = prevList.head;
+        // Traverse to the end of the list
+        while (current.next !== null) {
+          current = current.next;
+        }
 
-            // Add new node to the end of the list
-            console.log(`adding ${data} to the end of the list`);
-            current.next = newNode;
+        // Add new node to the end of the list
+        console.log(`adding ${data} to the end of the list`);
+        current.next = newNode;
 
-            return prevList;
-          }
-        });
-      },
-    [list, setList]
-  );
+        return prevList;
+      }
+    });
+  };
 
   const size = () => {
     let count = 0;
@@ -168,17 +283,12 @@ export const LinkedListServiceProvider = ({ children }: { children: ReactNode })
   return (
     <LinkedListServiceContext.Provider
       value={{
-        list,
-        setList,
-        prepend,
-        append,
-        size,
-        remove,
-        reverse,
-        show: printList,
-        hasValue,
-        isEmpty,
-        getList
+        linkedList: linkedListState,
+        linkedListDispatcher: linkedListDispatcher,
+        getSize: getSize,
+        show: show,
+        hasValue: hasValue,
+        isEmpty: isEmpty
       }}>
       {children}
     </LinkedListServiceContext.Provider>

@@ -1,18 +1,19 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { RefObject, forwardRef } from 'react';
+import { SelectComponent } from './SelectComponent';
 
-interface InputComponentProps {
-  value?: string;
-  onChange?: () => unknown;
+export interface InputComponentProps {
+  selectRef: RefObject<HTMLSelectElement>;
+  selectOnChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export const InputComponent = forwardRef<HTMLInputElement, InputComponentProps>(function InputComponent(
-  { value, onChange, ...otherProps },
+  { selectRef, selectOnChange },
   ref
 ) {
   return (
-    <div>
+    <>
       <label htmlFor="price" className="block text-sm font-medium leading-6 text-white-900">
         Node Value
       </label>
@@ -25,25 +26,15 @@ export const InputComponent = forwardRef<HTMLInputElement, InputComponentProps>(
           className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Value"
           ref={ref}
-          value={value}
-          onChange={onChange}
-          {...otherProps}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
           <label htmlFor="modifier" className="sr-only">
             modifier
           </label>
-          <select
-            id="modifier"
-            name="modifier"
-            className="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
-            <option>Prepend</option>
-            <option>Append</option>
-            <option>EUR</option>
-          </select>
+          <SelectComponent ref={selectRef} onChange={selectOnChange} />
         </div>
       </div>
-    </div>
+    </>
   );
 });
 

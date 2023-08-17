@@ -1,20 +1,23 @@
 'use client';
-import { LinkedListComponent } from './LinkedListComponent';
-import {
-  LinkedList,
-  LinkedListServiceProvider,
-  useLinkedListServiceContext
-} from './services/LinkedListServiceProvider';
-import { InputComponent } from './components/InputComponent';
-import { revalidatePath } from 'next/cache';
-import { Header } from './components/Header';
+import { useRef, useState } from 'react';
 import { CoreButton } from './components/CoreButton';
-import { useEffect, useRef } from 'react';
+import { Header } from './components/Header';
+import { InputComponent } from './components/InputComponent';
+import { LinkedListActionTypes, useLinkedListServiceContext } from './services/LinkedListServiceProvider';
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { list, setList, append } = useLinkedListServiceContext();
-  useEffect(() => {}, [list]);
+  const selectRef = useRef<HTMLSelectElement | null>(null);
+  const { linkedList, linkedListDispatcher } = useLinkedListServiceContext();
+  const [activeBtnText, setActiveBtnText] = useState<string>('add');
+
+  const selectOnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.value === 'remove') {
+      setActiveBtnText('drop');
+    } else {
+      setActiveBtnText('add');
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-around p-24">
@@ -27,46 +30,19 @@ export default function Home() {
             <p>3. What your list grow.</p>
             <p>4. Repeat 1-3.</p>
           </div> */}
-          <div>LIST: {JSON.stringify(list, null, 2)}</div>
-          <InputComponent ref={inputRef} />
-          <CoreButton onClick={() => append(inputRef?.current?.value)}>Add</CoreButton>
-          <div className="input-group">
-            <div className="input-group-btn">
-              {/* <form action={appendToList}>
-                <input type="text" name="nodeData" className="form-control" placeholder="Node Value" />
-                <button
-                  className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                  data-toggle="dropdown">
-                  Add
-                </button>
-              </form> */}
-
-              {/* <ul className="dropdown-menu">
-                <li>
-                  <a
-                    href="#"
-                    className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-                    To End
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="dropdown-item" ng-click="link.prepend(val)">
-                    To Start
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="dropdown-item" ng-click="link.remove(val)">
-                    Remove
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="dropdown-item" ng-click="link.reverse()">
-                    Reverse
-                  </a>
-                </li>
-              </ul> */}
-            </div>
-          </div>
+          <div>LIST: {JSON.stringify(linkedList, null, 2)}</div>
+          <InputComponent ref={inputRef} selectRef={selectRef} selectOnChange={selectOnChange} />
+          <CoreButton
+            onClick={() =>
+              linkedListDispatcher({
+                type: selectRef.current?.value
+                  ? (selectRef.current.value as unknown as LinkedListActionTypes)
+                  : 'append',
+                data: inputRef.current?.value
+              })
+            }>
+            {activeBtnText}
+          </CoreButton>
         </div>
       </div>
 

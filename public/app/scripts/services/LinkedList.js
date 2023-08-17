@@ -16,7 +16,7 @@ LinkedList.prototype.isEmpty = function () {
 //Add a node to the beginning of the list(prepend)
 LinkedList.prototype.prepend = function (val) {
     this.head = {
-        data: val,
+        data:  val,
         next: this.head
     };
     console.log("Added Node to beginning of List.");
