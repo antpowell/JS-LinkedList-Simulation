@@ -4,6 +4,7 @@ import { CoreButton } from './components/CoreButton';
 import { Header } from './components/Header';
 import { InputComponent } from './components/InputComponent';
 import { LinkedListActionTypes, useLinkedListServiceContext } from './services/LinkedListServiceProvider';
+import { LinkedListDisplay } from './components/LinkedListDisplay';
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -30,7 +31,7 @@ export default function Home() {
             <p>3. What your list grow.</p>
             <p>4. Repeat 1-3.</p>
           </div> */}
-          <div>LIST: {JSON.stringify(linkedList, null, 2)}</div>
+          <LinkedListDisplay list={linkedList} />
           <InputComponent ref={inputRef} selectRef={selectRef} selectOnChange={selectOnChange} />
           <CoreButton
             onClick={() =>
